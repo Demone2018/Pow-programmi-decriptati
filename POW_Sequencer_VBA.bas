@@ -181,29 +181,59 @@ End Sub
 Sub CreateSequencedMDB(sequence() As Integer, sourcePath As String, outputPath As String)
     ' ===========================================
     ' Crea il file MDB combinato
-    ' Usa DAO per manipolare i database Access
+    ' Supporta DAO 12.0, DAO 3.6 e ADO
     ' ===========================================
 
     On Error GoTo ErrorHandler
 
-    Dim dbSource As Object ' DAO.Database
-    Dim dbTarget As Object ' DAO.Database
-    Dim rsSource As Object ' DAO.Recordset
-    Dim rsTarget As Object ' DAO.Recordset
+    Dim dbSource As Object ' Database
+    Dim dbTarget As Object ' Database
+    Dim rsSource As Object ' Recordset
+    Dim rsTarget As Object ' Recordset
     Dim daoEngine As Object
     Dim i As Integer
     Dim currentLineOffset As Integer
     Dim progNum As Integer
     Dim sourceFile As String
+    Dim engineType As String
 
-    ' Crea oggetto DAO
-    Set daoEngine = CreateObject("DAO.DBEngine.36")
+    ' Prova a creare oggetto DAO (diverse versioni)
+    On Error Resume Next
+
+    ' Prova DAO 12.0 (Access 2007+)
+    Set daoEngine = CreateObject("DAO.DBEngine.120")
+    If daoEngine Is Nothing Then
+        ' Prova DAO 3.6 (Access 2000-2003)
+        Set daoEngine = CreateObject("DAO.DBEngine.36")
+    End If
+
+    On Error GoTo ErrorHandler
+
+    If daoEngine Is Nothing Then
+        ' Nessun DAO disponibile, usa metodo semplice
+        MsgBox "DAO non disponibile sul sistema." & vbCrLf & vbCrLf & _
+               "Verra' copiato solo il primo programma della sequenza." & vbCrLf & _
+               "Per combinare piu' programmi, installa Microsoft Access Database Engine.", vbExclamation
+
+        ' Copia solo il primo file
+        sourceFile = sourcePath & "\" & Programs(sequence(1)).Name & ".mdb"
+        FileCopy sourceFile, outputPath
+
+        MsgBox "File copiato: " & outputPath, vbInformation
+        Exit Sub
+    End If
 
     ' Copia il primo file come base
     sourceFile = sourcePath & "\" & Programs(sequence(1)).Name & ".mdb"
 
     ' Copia file sorgente come base
     FileCopy sourceFile, outputPath
+
+    ' Se c'e' solo un programma, abbiamo finito
+    If UBound(sequence) = 1 Then
+        MsgBox "File MDB generato con successo!" & vbCrLf & vbCrLf & outputPath, vbInformation
+        Exit Sub
+    End If
 
     ' Apri il database target
     Set dbTarget = daoEngine.OpenDatabase(outputPath, True)
@@ -239,9 +269,17 @@ Sub CreateSequencedMDB(sequence() As Integer, sourcePath As String, outputPath A
     Exit Sub
 
 ErrorHandler:
-    MsgBox "Errore durante la generazione:" & vbCrLf & Err.Description, vbCritical
+    Dim errMsg As String
+    errMsg = "Errore durante la generazione:" & vbCrLf & Err.Description & vbCrLf & vbCrLf
+    errMsg = errMsg & "Possibili soluzioni:" & vbCrLf
+    errMsg = errMsg & "1. Installa Microsoft Access Database Engine 2010/2016" & vbCrLf
+    errMsg = errMsg & "2. Oppure installa Microsoft Access" & vbCrLf
+    errMsg = errMsg & "3. Scarica da: https://www.microsoft.com/en-us/download/details.aspx?id=54920"
+
+    MsgBox errMsg, vbCritical
 
     ' Cleanup
+    On Error Resume Next
     If Not dbSource Is Nothing Then dbSource.Close
     If Not dbTarget Is Nothing Then dbTarget.Close
 End Sub
