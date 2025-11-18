@@ -191,29 +191,44 @@ Sub CreateSequencedMDB(sequence() As Integer, sourcePath As String, outputPath A
     Dim rsSource As Object ' Recordset
     Dim rsTarget As Object ' Recordset
     Dim daoEngine As Object
+    Dim adoConn As Object ' ADODB.Connection
     Dim i As Integer
     Dim currentLineOffset As Integer
     Dim progNum As Integer
     Dim sourceFile As String
     Dim engineType As String
+    Dim useADO As Boolean
+
+    useADO = False
 
     ' Prova a creare oggetto DAO (diverse versioni)
     On Error Resume Next
 
-    ' Prova DAO 12.0 (Access 2007+)
+    ' Prova DAO 12.0 (Access 2007+, Office 365)
     Set daoEngine = CreateObject("DAO.DBEngine.120")
     If daoEngine Is Nothing Then
         ' Prova DAO 3.6 (Access 2000-2003)
         Set daoEngine = CreateObject("DAO.DBEngine.36")
     End If
 
+    ' Se DAO non disponibile, prova ADO
+    If daoEngine Is Nothing Then
+        Set adoConn = CreateObject("ADODB.Connection")
+        If Not adoConn Is Nothing Then
+            useADO = True
+            Set adoConn = Nothing ' Lo ricreiamo quando serve
+        End If
+    End If
+
     On Error GoTo ErrorHandler
 
-    If daoEngine Is Nothing Then
-        ' Nessun DAO disponibile, usa metodo semplice
-        MsgBox "DAO non disponibile sul sistema." & vbCrLf & vbCrLf & _
+    If daoEngine Is Nothing And Not useADO Then
+        ' Nessun motore disponibile, usa metodo semplice
+        MsgBox "DAO e ADO non disponibili sul sistema." & vbCrLf & vbCrLf & _
                "Verra' copiato solo il primo programma della sequenza." & vbCrLf & _
-               "Per combinare piu' programmi, installa Microsoft Access Database Engine.", vbExclamation
+               "Per combinare piu' programmi, installa Microsoft Access Database Engine 64-bit:" & vbCrLf & _
+               "https://www.microsoft.com/en-us/download/details.aspx?id=54920" & vbCrLf & _
+               "(Seleziona AccessDatabaseEngine_X64.exe)", vbExclamation
 
         ' Copia solo il primo file
         sourceFile = sourcePath & "\" & Programs(sequence(1)).Name & ".mdb"
@@ -235,34 +250,41 @@ Sub CreateSequencedMDB(sequence() As Integer, sourcePath As String, outputPath A
         Exit Sub
     End If
 
-    ' Apri il database target
-    Set dbTarget = daoEngine.OpenDatabase(outputPath, True)
+    ' Usa ADO o DAO in base a cosa e' disponibile
+    If useADO Then
+        ' Usa ADO per combinare i database
+        Call CombineWithADO(sequence, sourcePath, outputPath)
+    Else
+        ' Usa DAO
+        ' Apri il database target
+        Set dbTarget = daoEngine.OpenDatabase(outputPath, True)
 
-    ' Offset iniziale per lineNumber
-    currentLineOffset = Programs(sequence(1)).MaxLineNumber
+        ' Offset iniziale per lineNumber
+        currentLineOffset = Programs(sequence(1)).MaxLineNumber
 
-    ' Per ogni programma successivo nella sequenza
-    For i = 2 To UBound(sequence)
-        progNum = sequence(i)
-        sourceFile = sourcePath & "\" & Programs(progNum).Name & ".mdb"
+        ' Per ogni programma successivo nella sequenza
+        For i = 2 To UBound(sequence)
+            progNum = sequence(i)
+            sourceFile = sourcePath & "\" & Programs(progNum).Name & ".mdb"
 
-        ' Apri database sorgente
-        Set dbSource = daoEngine.OpenDatabase(sourceFile, False, True)
+            ' Apri database sorgente
+            Set dbSource = daoEngine.OpenDatabase(sourceFile, False, True)
 
-        ' Copia le funzioni con offset sui lineNumber
-        Call CopyFunctionsWithOffset(dbSource, dbTarget, currentLineOffset)
+            ' Copia le funzioni con offset sui lineNumber
+            Call CopyFunctionsWithOffset(dbSource, dbTarget, currentLineOffset)
 
-        ' Aggiorna offset
-        currentLineOffset = currentLineOffset + Programs(progNum).MaxLineNumber
+            ' Aggiorna offset
+            currentLineOffset = currentLineOffset + Programs(progNum).MaxLineNumber
 
-        ' Chiudi sorgente
-        dbSource.Close
-        Set dbSource = Nothing
-    Next i
+            ' Chiudi sorgente
+            dbSource.Close
+            Set dbSource = Nothing
+        Next i
 
-    ' Chiudi target
-    dbTarget.Close
-    Set dbTarget = Nothing
+        ' Chiudi target
+        dbTarget.Close
+        Set dbTarget = Nothing
+    End If
 
     MsgBox "File MDB generato con successo!" & vbCrLf & vbCrLf & outputPath, vbInformation
 
@@ -272,9 +294,10 @@ ErrorHandler:
     Dim errMsg As String
     errMsg = "Errore durante la generazione:" & vbCrLf & Err.Description & vbCrLf & vbCrLf
     errMsg = errMsg & "Possibili soluzioni:" & vbCrLf
-    errMsg = errMsg & "1. Installa Microsoft Access Database Engine 2010/2016" & vbCrLf
-    errMsg = errMsg & "2. Oppure installa Microsoft Access" & vbCrLf
-    errMsg = errMsg & "3. Scarica da: https://www.microsoft.com/en-us/download/details.aspx?id=54920"
+    errMsg = errMsg & "1. Installa Microsoft Access Database Engine 64-bit" & vbCrLf
+    errMsg = errMsg & "2. Scarica da: https://www.microsoft.com/en-us/download/details.aspx?id=54920" & vbCrLf
+    errMsg = errMsg & "3. Seleziona: AccessDatabaseEngine_X64.exe" & vbCrLf
+    errMsg = errMsg & "4. Se da errore, esegui: AccessDatabaseEngine_X64.exe /quiet"
 
     MsgBox errMsg, vbCritical
 
@@ -282,6 +305,86 @@ ErrorHandler:
     On Error Resume Next
     If Not dbSource Is Nothing Then dbSource.Close
     If Not dbTarget Is Nothing Then dbTarget.Close
+End Sub
+
+Sub CombineWithADO(sequence() As Integer, sourcePath As String, outputPath As String)
+    ' ===========================================
+    ' Combina database usando ADO
+    ' ===========================================
+
+    Dim connTarget As Object
+    Dim connSource As Object
+    Dim rsSource As Object
+    Dim rsTarget As Object
+    Dim i As Integer
+    Dim progNum As Integer
+    Dim sourceFile As String
+    Dim currentLineOffset As Integer
+    Dim connStr As String
+    Dim fld As Object
+
+    ' Connection string per file MDB
+    connStr = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source="
+
+    ' Apri connessione al target
+    Set connTarget = CreateObject("ADODB.Connection")
+    connTarget.Open connStr & outputPath
+
+    ' Offset iniziale
+    currentLineOffset = Programs(sequence(1)).MaxLineNumber
+
+    ' Per ogni programma successivo
+    For i = 2 To UBound(sequence)
+        progNum = sequence(i)
+        sourceFile = sourcePath & "\" & Programs(progNum).Name & ".mdb"
+
+        ' Apri connessione al sorgente
+        Set connSource = CreateObject("ADODB.Connection")
+        connSource.Open connStr & sourceFile
+
+        ' Copia i dati dalla tabella Soudure
+        On Error Resume Next
+        Set rsSource = CreateObject("ADODB.Recordset")
+        rsSource.Open "SELECT * FROM Soudure WHERE so_NumLigne > 0", connSource
+
+        If Err.Number = 0 Then
+            Set rsTarget = CreateObject("ADODB.Recordset")
+            rsTarget.Open "Soudure", connTarget, 1, 3 ' adOpenKeyset, adLockOptimistic
+
+            Do While Not rsSource.EOF
+                rsTarget.AddNew
+
+                For Each fld In rsSource.Fields
+                    If fld.Name = "so_NumLigne" Then
+                        rsTarget(fld.Name) = fld.Value + currentLineOffset
+                    Else
+                        On Error Resume Next
+                        rsTarget(fld.Name) = fld.Value
+                        On Error GoTo 0
+                    End If
+                Next fld
+
+                rsTarget.Update
+                rsSource.MoveNext
+            Loop
+
+            rsTarget.Close
+            rsSource.Close
+        End If
+
+        On Error GoTo 0
+
+        ' Aggiorna offset
+        currentLineOffset = currentLineOffset + Programs(progNum).MaxLineNumber
+
+        ' Chiudi sorgente
+        connSource.Close
+        Set connSource = Nothing
+    Next i
+
+    ' Chiudi target
+    connTarget.Close
+    Set connTarget = Nothing
 End Sub
 
 Sub CopyFunctionsWithOffset(dbSource As Object, dbTarget As Object, lineOffset As Integer)
