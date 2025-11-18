@@ -465,6 +465,100 @@ Sub SelectSourceFolder()
     End With
 End Sub
 
+Sub DiagnoseDatabase()
+    ' ===========================================
+    ' Diagnostica struttura database MDB
+    ' Mostra tabelle e campi disponibili
+    ' ===========================================
+
+    Dim conn As Object
+    Dim rs As Object
+    Dim connStr As String
+    Dim sourcePath As String
+    Dim wsConfig As Worksheet
+    Dim msg As String
+    Dim filePath As String
+    Dim fld As Object
+
+    Call InitializePrograms
+
+    ' Leggi percorso sorgente
+    On Error Resume Next
+    Set wsConfig = ThisWorkbook.Sheets("Configurazione")
+    If Not wsConfig Is Nothing Then
+        sourcePath = wsConfig.Range("B2").Value
+    End If
+    On Error GoTo 0
+
+    If sourcePath = "" Or sourcePath = "default" Then
+        sourcePath = ThisWorkbook.Path & "\Sorgenti"
+    End If
+
+    ' Usa il primo file disponibile per la diagnosi
+    filePath = sourcePath & "\30IGNIT.mdb"
+    If Dir(filePath) = "" Then
+        filePath = sourcePath & "\31NOWELD.mdb"
+    End If
+    If Dir(filePath) = "" Then
+        filePath = sourcePath & "\32WELD.mdb"
+    End If
+    If Dir(filePath) = "" Then
+        filePath = sourcePath & "\33DWNSLP.mdb"
+    End If
+
+    If Dir(filePath) = "" Then
+        MsgBox "Nessun file MDB trovato in:" & vbCrLf & sourcePath, vbCritical
+        Exit Sub
+    End If
+
+    connStr = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" & filePath
+
+    Set conn = CreateObject("ADODB.Connection")
+    On Error Resume Next
+    conn.Open connStr
+
+    If Err.Number <> 0 Then
+        MsgBox "Errore connessione:" & vbCrLf & Err.Description, vbCritical
+        Exit Sub
+    End If
+    On Error GoTo 0
+
+    msg = "FILE: " & filePath & vbCrLf & vbCrLf
+
+    ' Lista tabelle
+    msg = msg & "TABELLE DISPONIBILI:" & vbCrLf
+    Set rs = conn.OpenSchema(20) ' adSchemaTables
+    Do While Not rs.EOF
+        If rs("TABLE_TYPE") = "TABLE" Then
+            msg = msg & "  - " & rs("TABLE_NAME") & vbCrLf
+        End If
+        rs.MoveNext
+    Loop
+    rs.Close
+
+    ' Mostra campi della tabella Soudure (se esiste)
+    msg = msg & vbCrLf & "CAMPI TABELLA SOUDURE:" & vbCrLf
+    On Error Resume Next
+    Set rs = CreateObject("ADODB.Recordset")
+    rs.Open "SELECT TOP 1 * FROM Soudure", conn, 3, 1
+
+    If Err.Number <> 0 Then
+        msg = msg & "  ERRORE: " & Err.Description & vbCrLf
+        Err.Clear
+    Else
+        For Each fld In rs.Fields
+            msg = msg & "  - " & fld.Name & " (" & fld.Type & ")" & vbCrLf
+        Next fld
+        rs.Close
+    End If
+    On Error GoTo 0
+
+    conn.Close
+    Set conn = Nothing
+
+    MsgBox msg, vbInformation, "Diagnosi Database"
+End Sub
+
 Sub CheckSourceFiles()
     Dim wsConfig As Worksheet
     Dim sourcePath As String
