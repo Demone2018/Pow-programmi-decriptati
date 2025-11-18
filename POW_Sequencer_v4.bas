@@ -219,7 +219,6 @@ Sub CreateUnifiedProgram(sequence() As Integer, sourcePath As String, outputPath
     Dim connTarget As Object
     Dim connSource As Object
     Dim rsSource As Object
-    Dim rsTarget As Object
     Dim i As Integer
     Dim progNum As Integer
     Dim sourceFile As String
@@ -227,6 +226,10 @@ Sub CreateUnifiedProgram(sequence() As Integer, sourcePath As String, outputPath
     Dim connStr As String
     Dim fld As Object
     Dim sql As String
+    Dim fieldNames As String
+    Dim fieldValues As String
+    Dim insertSQL As String
+    Dim fieldValue As Variant
 
     ' Connection string per file MDB
     connStr = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source="
@@ -289,52 +292,61 @@ Sub CreateUnifiedProgram(sequence() As Integer, sourcePath As String, outputPath
         On Error GoTo ErrorHandler
 
         If Not rsSource.EOF Then
-            ' Apri la tabella target per inserimento
-            Set rsTarget = CreateObject("ADODB.Recordset")
-            rsTarget.Open "Soudure", connTarget, 1, 3 ' adOpenKeyset, adLockOptimistic
-
+            ' Usa SQL INSERT invece di recordset AddNew per maggiore compatibilita
             Do While Not rsSource.EOF
-                rsTarget.AddNew
+                fieldNames = ""
+                fieldValues = ""
 
                 For Each fld In rsSource.Fields
-                    On Error Resume Next
-
-                    ' Salta campi auto-incremento o ID (non possono essere copiati)
+                    ' Salta campi auto-incremento o ID
                     If LCase(fld.Name) = "id" Or _
                        LCase(fld.Name) = "so_id" Or _
-                       (fld.Attributes And &H10) = &H10 Then ' adFldRowID
-                        ' Skip - campo auto-incremento
-                    ElseIf fld.Name = "so_Numero" Then
-                        ' Rinumera la linea con offset
-                        rsTarget(fld.Name) = fld.Value + currentLineOffset
-                    ElseIf fld.Name = "so_CodProg" Then
-                        ' Usa il nuovo numero programma
-                        rsTarget(fld.Name) = finalProgNum
-                    ElseIf fld.Name = "so_LibProg" Then
-                        ' Usa il nuovo nome programma
-                        rsTarget(fld.Name) = finalProgName
+                       (fld.Attributes And &H10) = &H10 Then
+                        ' Skip
                     Else
-                        ' Copia il valore originale
-                        rsTarget(fld.Name) = fld.Value
-                    End If
+                        ' Aggiungi nome campo
+                        If fieldNames <> "" Then fieldNames = fieldNames & ", "
+                        fieldNames = fieldNames & "[" & fld.Name & "]"
 
-                    On Error GoTo ErrorHandler
+                        ' Determina il valore
+                        If fld.Name = "so_Numero" Then
+                            fieldValue = fld.Value + currentLineOffset
+                        ElseIf fld.Name = "so_CodProg" Then
+                            fieldValue = finalProgNum
+                        ElseIf fld.Name = "so_LibProg" Then
+                            fieldValue = finalProgName
+                        Else
+                            fieldValue = fld.Value
+                        End If
+
+                        ' Aggiungi valore con formattazione corretta
+                        If fieldValues <> "" Then fieldValues = fieldValues & ", "
+
+                        If IsNull(fieldValue) Then
+                            fieldValues = fieldValues & "NULL"
+                        ElseIf fld.Type = 202 Or fld.Type = 200 Or fld.Type = 201 Then ' String types
+                            fieldValues = fieldValues & "'" & Replace(CStr(fieldValue), "'", "''") & "'"
+                        ElseIf fld.Type = 7 Then ' Date
+                            fieldValues = fieldValues & "#" & CStr(fieldValue) & "#"
+                        Else
+                            fieldValues = fieldValues & CStr(fieldValue)
+                        End If
+                    End If
                 Next fld
 
-                ' Update con gestione errori
+                ' Esegui INSERT
+                insertSQL = "INSERT INTO Soudure (" & fieldNames & ") VALUES (" & fieldValues & ")"
                 On Error Resume Next
-                rsTarget.Update
+                connTarget.Execute insertSQL
                 If Err.Number <> 0 Then
-                    Debug.Print "Errore Update riga " & rsSource("so_Numero") & ": " & Err.Description
+                    Debug.Print "Errore INSERT: " & Err.Description
+                    Debug.Print "SQL: " & insertSQL
                     Err.Clear
                 End If
                 On Error GoTo ErrorHandler
 
                 rsSource.MoveNext
             Loop
-
-            rsTarget.Close
-            Set rsTarget = Nothing
         End If
 
         rsSource.Close
