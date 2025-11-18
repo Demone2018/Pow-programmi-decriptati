@@ -214,8 +214,6 @@ Sub CreateUnifiedProgram(sequence() As Integer, sourcePath As String, outputPath
     ' con tutte le funzioni in sequenza
     ' ===========================================
 
-    On Error GoTo ErrorHandler
-
     Dim connTarget As Object
     Dim connSource As Object
     Dim rsSource As Object
@@ -230,36 +228,67 @@ Sub CreateUnifiedProgram(sequence() As Integer, sourcePath As String, outputPath
     Dim fieldValues As String
     Dim insertSQL As String
     Dim fieldValue As Variant
+    Dim stepNum As Integer
 
     ' Connection string per file MDB
     connStr = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source="
 
-    ' Copia il primo file come base
+    ' STEP 1: Copia il primo file come base
+    stepNum = 1
+    On Error GoTo ErrorHandler
     sourceFile = sourcePath & "\" & Programs(sequence(1)).Name & ".mdb"
+
+    ' Elimina file esistente se presente
+    On Error Resume Next
+    Kill outputPath
+    On Error GoTo ErrorHandler
+
     FileCopy sourceFile, outputPath
 
-    ' Apri connessione al target
+    ' STEP 2: Apri connessione al target
+    stepNum = 2
     Set connTarget = CreateObject("ADODB.Connection")
+    connTarget.Mode = 3 ' adModeReadWrite
+
+    On Error Resume Next
     connTarget.Open connStr & outputPath
 
-    ' STEP 1: Aggiorna tutte le righe esistenti con il nuovo numero/nome programma
+    If Err.Number <> 0 Then
+        MsgBox "STEP 2 - Errore apertura file target:" & vbCrLf & _
+               outputPath & vbCrLf & vbCrLf & _
+               "Errore: " & Err.Description, vbCritical
+        Exit Sub
+    End If
+    On Error GoTo ErrorHandler
+
+    ' STEP 3: Aggiorna tutte le righe esistenti con il nuovo numero/nome programma
+    stepNum = 3
     On Error Resume Next
 
-    ' Aggiorna il codice programma in tutte le righe della tabella Soudure
     sql = "UPDATE Soudure SET so_CodProg = " & finalProgNum
     connTarget.Execute sql
 
-    ' Aggiorna il nome/libelle del programma se esiste il campo
+    If Err.Number <> 0 Then
+        Debug.Print "UPDATE so_CodProg failed: " & Err.Description
+        Err.Clear
+    End If
+
     sql = "UPDATE Soudure SET so_LibProg = '" & finalProgName & "'"
     connTarget.Execute sql
+
+    If Err.Number <> 0 Then
+        Debug.Print "UPDATE so_LibProg failed: " & Err.Description
+        Err.Clear
+    End If
 
     On Error GoTo ErrorHandler
 
     ' Offset iniziale per lineNumber (dopo le linee del primo programma)
     currentLineOffset = Programs(sequence(1)).MaxLineNumber
 
-    ' STEP 2: Per ogni programma successivo, copia le funzioni
+    ' STEP 4+: Per ogni programma successivo, copia le funzioni
     For i = 2 To UBound(sequence)
+        stepNum = 3 + i
         progNum = sequence(i)
         sourceFile = sourcePath & "\" & Programs(progNum).Name & ".mdb"
 
@@ -375,18 +404,31 @@ NextProgram:
 
 ErrorHandler:
     Dim errMsg As String
-    errMsg = "Errore durante la generazione:" & vbCrLf & Err.Description & vbCrLf & vbCrLf
-    errMsg = errMsg & "Possibili soluzioni:" & vbCrLf
-    errMsg = errMsg & "1. Installa Microsoft Access Database Engine 64-bit" & vbCrLf
-    errMsg = errMsg & "2. Scarica da: https://www.microsoft.com/en-us/download/details.aspx?id=54920" & vbCrLf
-    errMsg = errMsg & "3. Seleziona: AccessDatabaseEngine_X64.exe"
+    errMsg = "Errore durante la generazione (STEP " & stepNum & "):" & vbCrLf & vbCrLf
+    errMsg = errMsg & "Errore: " & Err.Description & vbCrLf
+    errMsg = errMsg & "Numero: " & Err.Number & vbCrLf & vbCrLf
+
+    Select Case stepNum
+        Case 1
+            errMsg = errMsg & "Problema: Copia file sorgente" & vbCrLf
+        Case 2
+            errMsg = errMsg & "Problema: Apertura connessione al file target" & vbCrLf
+        Case 3
+            errMsg = errMsg & "Problema: UPDATE tabella Soudure" & vbCrLf
+        Case Else
+            errMsg = errMsg & "Problema: Copia funzioni da programmi successivi" & vbCrLf
+    End Select
+
+    errMsg = errMsg & vbCrLf & "Possibili soluzioni:" & vbCrLf
+    errMsg = errMsg & "1. Verifica che il file non sia aperto in Access" & vbCrLf
+    errMsg = errMsg & "2. Installa Microsoft Access Database Engine 64-bit" & vbCrLf
+    errMsg = errMsg & "   https://www.microsoft.com/en-us/download/details.aspx?id=54920"
 
     MsgBox errMsg, vbCritical
 
     ' Cleanup
     On Error Resume Next
     If Not rsSource Is Nothing Then rsSource.Close
-    If Not rsTarget Is Nothing Then rsTarget.Close
     If Not connSource Is Nothing Then connSource.Close
     If Not connTarget Is Nothing Then connTarget.Close
 End Sub
