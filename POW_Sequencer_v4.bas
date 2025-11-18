@@ -265,11 +265,12 @@ Sub CreateUnifiedProgram(sequence() As Integer, sourcePath As String, outputPath
     stepNum = 3
     On Error Resume Next
 
+    ' Aggiorna la tabella Soudure
     sql = "UPDATE Soudure SET so_CodProg = " & finalProgNum
     connTarget.Execute sql
 
     If Err.Number <> 0 Then
-        Debug.Print "UPDATE so_CodProg failed: " & Err.Description
+        Debug.Print "UPDATE Soudure so_CodProg failed: " & Err.Description
         Err.Clear
     End If
 
@@ -277,7 +278,25 @@ Sub CreateUnifiedProgram(sequence() As Integer, sourcePath As String, outputPath
     connTarget.Execute sql
 
     If Err.Number <> 0 Then
-        Debug.Print "UPDATE so_LibProg failed: " & Err.Description
+        Debug.Print "UPDATE Soudure so_LibProg failed: " & Err.Description
+        Err.Clear
+    End If
+
+    ' Aggiorna la tabella Script_Prog con lo stesso numero programma
+    sql = "UPDATE Script_Prog SET sp_CodProg = " & finalProgNum
+    connTarget.Execute sql
+
+    If Err.Number <> 0 Then
+        Debug.Print "UPDATE Script_Prog sp_CodProg failed: " & Err.Description
+        Err.Clear
+    End If
+
+    ' Aggiorna anche il nome in Script_Prog se esiste il campo
+    sql = "UPDATE Script_Prog SET sp_LibProg = '" & finalProgName & "'"
+    connTarget.Execute sql
+
+    If Err.Number <> 0 Then
+        Debug.Print "UPDATE Script_Prog sp_LibProg failed: " & Err.Description
         Err.Clear
     End If
 
@@ -599,6 +618,21 @@ Sub DiagnoseDatabase()
     On Error Resume Next
     Set rs = CreateObject("ADODB.Recordset")
     rs.Open "SELECT TOP 1 * FROM Soudure", conn, 3, 1
+
+    If Err.Number <> 0 Then
+        msg = msg & "  ERRORE: " & Err.Description & vbCrLf
+        Err.Clear
+    Else
+        For Each fld In rs.Fields
+            msg = msg & "  - " & fld.Name & " (" & fld.Type & ")" & vbCrLf
+        Next fld
+        rs.Close
+    End If
+
+    ' Mostra campi della tabella Script_Prog
+    msg = msg & vbCrLf & "CAMPI TABELLA SCRIPT_PROG:" & vbCrLf
+    Set rs = CreateObject("ADODB.Recordset")
+    rs.Open "SELECT TOP 1 * FROM Script_Prog", conn, 3, 1
 
     If Err.Number <> 0 Then
         msg = msg & "  ERRORE: " & Err.Description & vbCrLf
