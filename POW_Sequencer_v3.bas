@@ -276,7 +276,11 @@ Sub CreateUnifiedProgram(sequence() As Integer, sourcePath As String, outputPath
                 For Each fld In rsSource.Fields
                     On Error Resume Next
 
-                    If fld.Name = "so_NumLigne" Then
+                    ' Salta campi auto-incremento o ID (non possono essere copiati)
+                    If LCase(fld.Name) = "id" Or _
+                       (fld.Attributes And &H10) = &H10 Then ' adFldRowID
+                        ' Skip - campo auto-incremento
+                    ElseIf fld.Name = "so_NumLigne" Then
                         ' Rinumera la linea con offset
                         rsTarget(fld.Name) = fld.Value + currentLineOffset
                     ElseIf fld.Name = "so_CodProg" Then
@@ -289,11 +293,17 @@ Sub CreateUnifiedProgram(sequence() As Integer, sourcePath As String, outputPath
                         ' Copia il valore originale
                         rsTarget(fld.Name) = fld.Value
                     End If
-
-                    On Error GoTo 0
                 Next fld
 
+                ' Update con gestione errori
+                On Error Resume Next
                 rsTarget.Update
+                If Err.Number <> 0 Then
+                    Debug.Print "Errore Update: " & Err.Description
+                    Err.Clear
+                End If
+                On Error GoTo ErrorHandler
+
                 rsSource.MoveNext
             Loop
 
