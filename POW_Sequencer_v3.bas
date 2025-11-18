@@ -272,7 +272,7 @@ Sub CreateUnifiedProgram(sequence() As Integer, sourcePath As String, outputPath
         ' Leggi tutte le righe dalla tabella Soudure del sorgente
         Set rsSource = CreateObject("ADODB.Recordset")
         On Error Resume Next
-        rsSource.Open "SELECT * FROM Soudure ORDER BY so_NumLigne", connSource, 3, 1
+        rsSource.Open "SELECT * FROM Soudure ORDER BY so_Numero", connSource, 3, 1
 
         If Err.Number <> 0 Then
             MsgBox "Errore lettura tabella Soudure da: " & sourceFile & vbCrLf & Err.Description, vbExclamation
@@ -300,7 +300,7 @@ Sub CreateUnifiedProgram(sequence() As Integer, sourcePath As String, outputPath
                        LCase(fld.Name) = "so_id" Or _
                        (fld.Attributes And &H10) = &H10 Then ' adFldRowID
                         ' Skip - campo auto-incremento
-                    ElseIf fld.Name = "so_NumLigne" Then
+                    ElseIf fld.Name = "so_Numero" Then
                         ' Rinumera la linea con offset
                         rsTarget(fld.Name) = fld.Value + currentLineOffset
                     ElseIf fld.Name = "so_CodProg" Then
@@ -321,7 +321,7 @@ Sub CreateUnifiedProgram(sequence() As Integer, sourcePath As String, outputPath
                 On Error Resume Next
                 rsTarget.Update
                 If Err.Number <> 0 Then
-                    Debug.Print "Errore Update riga " & rsSource("so_NumLigne") & ": " & Err.Description
+                    Debug.Print "Errore Update riga " & rsSource("so_Numero") & ": " & Err.Description
                     Err.Clear
                 End If
                 On Error GoTo ErrorHandler
