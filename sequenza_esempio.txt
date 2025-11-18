@@ -1,0 +1,9 @@
+# POW Program Sequencer - Esempio Sequenza
+# Ogni riga contiene un numero di programma (30, 31, 32, 33)
+# Le righe che iniziano con # sono commenti
+
+# Sequenza standard: Accensione -> No saldatura -> Saldatura -> Downslope
+30
+31
+32
+33
