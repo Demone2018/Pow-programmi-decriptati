@@ -13,6 +13,9 @@ Private Const PROG_31 As String = "31NOWELD"
 Private Const PROG_32 As String = "32WELD"
 Private Const PROG_33 As String = "33DWNSLP"
 
+' Percorso cartella sorgenti (configurabile)
+Private SourceFolder As String
+
 ' Struttura per memorizzare le informazioni di un programma
 Private Type ProgramInfo
     Number As Integer
@@ -55,6 +58,7 @@ Sub GenerateMDB()
     ' ===========================================
 
     Dim ws As Worksheet
+    Dim wsConfig As Worksheet
     Dim sequence() As Integer
     Dim i As Integer
     Dim lastRow As Long
@@ -62,11 +66,47 @@ Sub GenerateMDB()
     Dim outputPath As String
     Dim sourcePath As String
     Dim totalFunctions As Integer
+    Dim fileDate As String
+    Dim missingFiles As String
 
     ' Inizializza
     Call InitializePrograms
 
     Set ws = ThisWorkbook.Sheets("Sequenza")
+
+    ' Leggi percorso sorgente dal foglio Configurazione
+    On Error Resume Next
+    Set wsConfig = ThisWorkbook.Sheets("Configurazione")
+    If Not wsConfig Is Nothing Then
+        sourcePath = wsConfig.Range("B2").Value
+    End If
+    On Error GoTo 0
+
+    ' Se non configurato, usa cartella predefinita
+    If sourcePath = "" Or sourcePath = "default" Then
+        sourcePath = ThisWorkbook.Path & "\Sorgenti"
+    End If
+
+    ' Verifica che la cartella esista
+    If Dir(sourcePath, vbDirectory) = "" Then
+        ' Prova la cartella del file Excel
+        sourcePath = ThisWorkbook.Path
+    End If
+
+    ' Verifica esistenza file sorgente
+    missingFiles = ""
+    For i = 30 To 33
+        If Dir(sourcePath & "\" & Programs(i).Name & ".mdb") = "" Then
+            missingFiles = missingFiles & "  - " & Programs(i).Name & ".mdb" & vbCrLf
+        End If
+    Next i
+
+    If missingFiles <> "" Then
+        MsgBox "File sorgente mancanti in:" & vbCrLf & sourcePath & vbCrLf & vbCrLf & _
+               missingFiles & vbCrLf & _
+               "Assicurati di salvare i file MDB da Powin-PC2 nella cartella Sorgenti.", vbCritical
+        Exit Sub
+    End If
 
     ' Trova l'ultima riga con dati
     lastRow = ws.Cells(ws.Rows.Count, "A").End(xlUp).Row
@@ -99,12 +139,21 @@ Sub GenerateMDB()
         totalFunctions = totalFunctions + Programs(CInt(progNum)).NumFunctions
     Next i
 
-    ' Mostra riepilogo
+    ' Mostra riepilogo con info sui file sorgente
     Dim msg As String
-    msg = "Sequenza programmi:" & vbCrLf & vbCrLf
+    msg = "CARTELLA SORGENTI:" & vbCrLf & sourcePath & vbCrLf & vbCrLf
+    msg = msg & "FILE SORGENTE (data ultima modifica):" & vbCrLf
 
     For i = 1 To UBound(sequence)
-        msg = msg & i & ". Programma " & sequence(i) & " (" & Programs(sequence(i)).Name & ")" & vbCrLf
+        Dim filePath As String
+        filePath = sourcePath & "\" & Programs(sequence(i)).Name & ".mdb"
+        fileDate = Format(FileDateTime(filePath), "dd/mm/yyyy hh:mm")
+        msg = msg & "  " & Programs(sequence(i)).Name & ".mdb - " & fileDate & vbCrLf
+    Next i
+
+    msg = msg & vbCrLf & "SEQUENZA PROGRAMMI:" & vbCrLf
+    For i = 1 To UBound(sequence)
+        msg = msg & "  " & i & ". Programma " & sequence(i) & " (" & Programs(sequence(i)).Name & ")" & vbCrLf
     Next i
 
     msg = msg & vbCrLf & "Totale funzioni: " & totalFunctions & vbCrLf & vbCrLf
@@ -121,14 +170,6 @@ Sub GenerateMDB()
         Title:="Salva file MDB")
 
     If outputPath = "False" Then
-        Exit Sub
-    End If
-
-    ' Chiedi percorso sorgente (cartella con i file MDB originali)
-    sourcePath = ThisWorkbook.Path
-    If Dir(sourcePath & "\30IGNIT.mdb") = "" Then
-        MsgBox "File sorgente 30IGNIT.mdb non trovato in:" & vbCrLf & sourcePath & vbCrLf & vbCrLf & _
-               "Assicurati che i file MDB sorgente siano nella stessa cartella del file Excel.", vbCritical
         Exit Sub
     End If
 
@@ -292,20 +333,103 @@ Sub ShowHelp()
 
     msg = "POW PROGRAM SEQUENCER - GUIDA" & vbCrLf & vbCrLf
     msg = msg & "COME USARE:" & vbCrLf
-    msg = msg & "1. Inserisci i numeri dei programmi nella colonna A" & vbCrLf
+    msg = msg & "1. Configura la cartella Sorgenti (foglio Configurazione)" & vbCrLf
+    msg = msg & "2. Salva i file MDB da Powin-PC2 nella cartella Sorgenti" & vbCrLf
+    msg = msg & "3. Inserisci i numeri dei programmi nella colonna A" & vbCrLf
     msg = msg & "   (valori ammessi: 30, 31, 32, 33)" & vbCrLf & vbCrLf
-    msg = msg & "2. L'ordine delle righe determina la sequenza" & vbCrLf
+    msg = msg & "4. L'ordine delle righe determina la sequenza" & vbCrLf
     msg = msg & "   di esecuzione delle funzioni" & vbCrLf & vbCrLf
-    msg = msg & "3. Clicca 'Genera MDB' per creare il file" & vbCrLf & vbCrLf
+    msg = msg & "5. Clicca 'Genera MDB' per creare il file" & vbCrLf & vbCrLf
     msg = msg & "PROGRAMMI DISPONIBILI:" & vbCrLf
     msg = msg & "  30 = IGNIT (Accensione) - 12 funzioni" & vbCrLf
     msg = msg & "  31 = NOWELD (No saldatura) - 39 funzioni" & vbCrLf
     msg = msg & "  32 = WELD (Saldatura) - 49 funzioni" & vbCrLf
     msg = msg & "  33 = DWNSLP (Downslope) - 49 funzioni" & vbCrLf & vbCrLf
-    msg = msg & "ESEMPIO:" & vbCrLf
-    msg = msg & "  Riga 2: 30  (prima IGNIT)" & vbCrLf
-    msg = msg & "  Riga 3: 32  (poi WELD)" & vbCrLf
-    msg = msg & "  Riga 4: 33  (infine DWNSLP)" & vbCrLf
+    msg = msg & "CARTELLA SORGENTI:" & vbCrLf
+    msg = msg & "  Salva qui i file MDB modificati da Powin-PC2:" & vbCrLf
+    msg = msg & "  - 30IGNIT.mdb" & vbCrLf
+    msg = msg & "  - 31NOWELD.mdb" & vbCrLf
+    msg = msg & "  - 32WELD.mdb" & vbCrLf
+    msg = msg & "  - 33DWNSLP.mdb" & vbCrLf
 
     MsgBox msg, vbInformation, "Guida POW Sequencer"
+End Sub
+
+Sub SelectSourceFolder()
+    ' Permette di selezionare la cartella sorgenti
+    Dim wsConfig As Worksheet
+    Dim folderPath As String
+
+    On Error Resume Next
+    Set wsConfig = ThisWorkbook.Sheets("Configurazione")
+    On Error GoTo 0
+
+    If wsConfig Is Nothing Then
+        MsgBox "Foglio Configurazione non trovato!", vbCritical
+        Exit Sub
+    End If
+
+    With Application.FileDialog(msoFileDialogFolderPicker)
+        .Title = "Seleziona cartella con i file MDB sorgente"
+        .InitialFileName = ThisWorkbook.Path & "\Sorgenti\"
+        If .Show = -1 Then
+            folderPath = .SelectedItems(1)
+            wsConfig.Range("B2").Value = folderPath
+
+            ' Verifica file presenti
+            Dim fileList As String
+            fileList = ""
+            If Dir(folderPath & "\30IGNIT.mdb") <> "" Then fileList = fileList & "  OK - 30IGNIT.mdb" & vbCrLf
+            If Dir(folderPath & "\31NOWELD.mdb") <> "" Then fileList = fileList & "  OK - 31NOWELD.mdb" & vbCrLf
+            If Dir(folderPath & "\32WELD.mdb") <> "" Then fileList = fileList & "  OK - 32WELD.mdb" & vbCrLf
+            If Dir(folderPath & "\33DWNSLP.mdb") <> "" Then fileList = fileList & "  OK - 33DWNSLP.mdb" & vbCrLf
+
+            If fileList = "" Then
+                MsgBox "Cartella selezionata:" & vbCrLf & folderPath & vbCrLf & vbCrLf & _
+                       "ATTENZIONE: Nessun file MDB trovato!" & vbCrLf & _
+                       "Assicurati di salvare i file da Powin-PC2 in questa cartella.", vbExclamation
+            Else
+                MsgBox "Cartella selezionata:" & vbCrLf & folderPath & vbCrLf & vbCrLf & _
+                       "File trovati:" & vbCrLf & fileList, vbInformation
+            End If
+        End If
+    End With
+End Sub
+
+Sub CheckSourceFiles()
+    ' Verifica lo stato dei file sorgente
+    Dim wsConfig As Worksheet
+    Dim sourcePath As String
+    Dim msg As String
+    Dim i As Integer
+
+    Call InitializePrograms
+
+    On Error Resume Next
+    Set wsConfig = ThisWorkbook.Sheets("Configurazione")
+    If Not wsConfig Is Nothing Then
+        sourcePath = wsConfig.Range("B2").Value
+    End If
+    On Error GoTo 0
+
+    If sourcePath = "" Or sourcePath = "default" Then
+        sourcePath = ThisWorkbook.Path & "\Sorgenti"
+    End If
+
+    msg = "CARTELLA SORGENTI:" & vbCrLf & sourcePath & vbCrLf & vbCrLf
+    msg = msg & "STATO FILE:" & vbCrLf
+
+    For i = 30 To 33
+        Dim filePath As String
+        filePath = sourcePath & "\" & Programs(i).Name & ".mdb"
+
+        If Dir(filePath) <> "" Then
+            msg = msg & "  OK - " & Programs(i).Name & ".mdb" & vbCrLf
+            msg = msg & "       Modificato: " & Format(FileDateTime(filePath), "dd/mm/yyyy hh:mm") & vbCrLf
+        Else
+            msg = msg & "  MANCANTE - " & Programs(i).Name & ".mdb" & vbCrLf
+        End If
+    Next i
+
+    MsgBox msg, vbInformation, "Stato File Sorgente"
 End Sub
