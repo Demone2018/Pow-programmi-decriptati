@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<PROGRAM number="33" name="33DWNSLP" majorVersion="2" minorVersion="2" size="519" randomNumber="A03D" startingOrder="0" realDownslopeTime="1" downslopeTime="25" cuttingCurrent="2979">
+  <AXIS_SOFT_CODE code="01"/>
+  <AXIS_SOFT_CODE code="05"/>
+  <AXIS_SOFT_CODE code="50"/>
+  <AXIS_SOFT_CODE code="00"/>
+  <AXIS_SOFT_CODE code="52"/>
+  <AXIS_SOFT_CODE code="5A"/>
+  <AXIS_SOFT_CODE code="21"/>
+  <AXIS_TYPE_CODE code="LT"/>
+  <AXIS_TYPE_CODE code="A8"/>
+  <AXIS_TYPE_CODE code="FE"/>
+  <AXIS_TYPE_CODE code="16"/>
+  <AXIS_TYPE_CODE code="05"/>
+  <AXIS_TYPE_CODE code="00"/>
+  <AXIS_TYPE_CODE code="11"/>
+  <AXIS_ADDRESS code="01"/>
+  <AXIS_ADDRESS code="05"/>
+  <AXIS_ADDRESS code="00"/>
+  <AXIS_ADDRESS code="FE"/>
+  <AXIS_ADDRESS code="07"/>
+  <DELTAS nb_deltas="99"/>
+  <CONFIG acknowledge="255">
+    <CHARACTERISTIC axisAddress="01" axisCodeLog="01" functionCode="00" functionCodeLog="00" conditionCode="9D" conditionCodeLog="03">
+      <PARAMS param="FAF4" codeLog="00" codeType="0" coef="1" valMini="0" valMaxi="65535" unit="." visu="false"/>
+      <PARAMS param="C8F4" codeLog="00" codeType="0" coef="1" valMini="0" valMaxi="65535" unit="." visu="false"/>
+      <PARAMS param="0100" codeLog="00" codeType="0" coef="1" valMini="0" valMaxi="65535" unit="." visu="false"/>
+      <PARAMS param="0202" codeLog="00" codeType="0" coef="1" valMini="0" valMaxi="65535" unit="." visu="false"/>
+      <PARAMS param="0003" codeLog="00" codeType="0" coef="1" valMini="0" valMaxi="65535" unit="." visu="false"/>
+      <PARAMS param="051F" codeLog="00" codeType="0" coef="1" valMini="0" valMaxi="65535" unit="." visu="false"/>
+      <PARAMS param="01A4" codeLog="00" codeType="0" coef="1" valMini="0" valMaxi="65535" unit="." visu="false"/>
+      <PARAMS param="FFFF" codeLog="00" codeType="0" coef="1" valMini="0" valMaxi="65535" unit="." visu="false"/>
+      <PARAMS param="2FF4" codeLog="00" codeType="0" coef="1" valMini="0" valMaxi="65535" unit="." visu="false"/>
+    </CHARACTERISTIC>
+    <TRIGGER triggerType="0" lineNumber="0" value="0"/>
+  </CONFIG>
+  <CONFIG acknowledge="255">
+    <CHARACTERISTIC axisAddress="01" axisCodeLog="01" functionCode="00" functionCodeLog="00" conditionCode="9E" conditionCodeLog="04">
+      <PARAMS param="003E" codeLog="00" codeType="0" coef="1" valMini="0" valMaxi="999" unit="." visu="false"/>
+      <PARAMS param="0005" codeLog="00" codeType="0" coef="1" valMini="0" valMaxi="65535" unit="." visu="false"/>
+      <PARAMS param="00D2" codeLog="00" codeType="0" coef="1" valMini="0" valMaxi="65535" unit="." visu="false"/>
+      <PARAMS param="3333" codeLog="00" codeType="0" coef="1" valMini="0" valMaxi="65535" unit="." visu="false"/>
+      <PARAMS param="2000" codeLog="00" codeType="0" coef="1" valMini="0" valMaxi="65535" unit="." visu="false"/>
+      <PARAMS param="4602" codeLog="00" codeType="0" coef="1" valMini="0" valMaxi="65535" unit="." visu="false"/>
+      <PARAMS param="F6F5" codeLog="00" codeType="0" coef="1" valMini="0" valMaxi="65535" unit="." visu="false"/>
+      <PARAMS param="0534" codeLog="00" codeType="0" coef="1" valMini="0" valMaxi="65535" unit="." visu="false"/>
+      <PARAMS param="0005" codeLog="00" codeType="0" coef="1" valMini="0" valMaxi="65535" unit="." visu="false"/>
+    </CHARACTERISTIC>
+    <TRIGGER triggerType="0" lineNumber="0" value="0"/>
+  </CONFIG>
+  <CONFIG acknowledge="0">
+    <CHARACTERISTIC axisAddress="01" axisCodeLog="01" functionCode="E0" functionCodeLog="08" conditionCode="FF" conditionCodeLog="">
+      <PARAMS param="0001" codeLog="09" codeType="0" coef="1" valMini="0" valMaxi="20" unit="." visu="false"/>
+      <PARAMS param="A5F7" codeLog="09" codeType="3" coef="1" valMini="0" valMaxi="20" unit="." visu="false"/>
+      <PARAMS param="0000" codeLog="" codeType="" coef="0" valMini="0" valMaxi="0" unit="" visu="false"/>
+    </CHARACTERISTIC>
+    <TRIGGER triggerType="0" lineNumber="0" value="0"/>
+  </CONFIG>
+  <CONFIG acknowledge="255">
+    <CHARACTERISTIC axisAddress="2F" axisCodeLog="05" functionCode="EA" functionCodeLog="0A" conditionCode="FF" conditionCodeLog="">
+      <PARAMS param="0506" codeLog="00" codeType="0" coef="1" valMini="0" valMaxi="65535" unit="." visu="false"/>
+    </CHARACTERISTIC>
+    <TRIGGER triggerType="0" lineNumber="0" value="0"/>
+  </CONFIG>
+  <CONFIG acknowledge="255">
+    <CHARACTERISTIC axisAddress="05" axisCodeLog="05" functionCode="00" functionCodeLog="00" conditionCode="9C" conditionCodeLog="40">
+      <PARAMS param="DAFF" codeLog="00" codeType="2" coef="1" valMini="1" valMaxi="2000" unit="." visu="false"/>
+      <PARAMS param="1CCD" codeLog="00" codeType="0" coef="163,84" valMini="5" valMaxi="45" unit="." visu="false"/>
+      <PARAMS param="0302" codeLog="00" codeType="0" coef="163,84" valMini="0" valMaxi="7" unit="." visu="false"/>
+      <PARAMS param="00A4" codeLog="00" codeType="0" coef="163,84" valMini="0" valMaxi="1" unit="." visu="false"/>
+      <PARAMS param="9DF8" codeLog="00" codeType="2" coef="1" valMini="0" valMaxi="1" unit="." visu="false"/>
+    </CHARACTERISTIC>
+    <TRIGGER triggerType="0" lineNumber="0" value="0"/>
+  </CONFIG>
+  <CONFIG acknowledge="255">
+    <CHARACTERISTIC axisAddress="05" axisCodeLog="05" functionCode="00" functionCodeLog="00" conditionCode="9D" conditionCodeLog="41">
+      <PARAMS param="0014" codeLog="00" codeType="0" coef="1" valMini="1" valMaxi="200" unit="." visu="false"/>
+      <PARAMS param="51EC" codeLog="00" codeType="0" coef="13,981" valMini="1" valMaxi="1500" unit="." visu="false"/>
+      <PARAMS param="02BC" codeLog="00" codeType="0" coef="13,981" valMini="1" valMaxi="1500" unit="." visu="false"/>
+      <PARAMS param="0576" codeLog="00" codeType="0" coef="13,981" valMini="1" valMaxi="1500" unit="." visu="false"/>
+      <PARAMS param="02BC" codeLog="00" codeType="0" coef="13,981" valMini="1" valMaxi="1500" unit="." visu="false"/>
+      <PARAMS param="00F0" codeLog="00" codeType="0" coef="120" valMini="0,5" valMaxi="5" unit="." visu="false"/>
+      <PARAMS param="000D" codeLog="00" codeType="0" coef="1" valMini="0" valMaxi="65535" unit="." visu="false"/>
+      <PARAMS param="ED99" codeLog="00" codeType="0" coef="1" valMini="0" valMaxi="65535" unit="." visu="false"/>
+      <PARAMS param="AAFF" codeLog="00" codeType="2" coef="1" valMini="0" valMaxi="32000" unit="." visu="false"/>
+    </CHARACTERISTIC>
+    <TRIGGER triggerType="0" lineNumber="0" value="0"/>
+  </CONFIG>
+  <CONFIG acknowledge="255">
+    <CHARACTERISTIC axisAddress="00" axisCodeLog="00" functionCode="00" functionCodeLog="00" conditionCode="0D" conditionCodeLog="46"/>
+    <TRIGGER triggerType="0" lineNumber="0" value="0"/>
+  </CONFIG>
+  <CONFIG acknowledge="255">
+    <CHARACTERISTIC axisAddress="07" axisCodeLog="21" functionCode="33" functionCodeLog="51" conditionCode="9D" conditionCodeLog="9D">
+      <PARAMS param="0000" codeLog="00" codeType="0" coef="1" valMini="0" valMaxi="65535" unit="." visu="false"/>
+    </CHARACTERISTIC>
+    <TRIGGER triggerType="0" lineNumber="0" value="0"/>
+  </CONFIG>
+  <CONFIG acknowledge="255">
+    <CHARACTERISTIC axisAddress="07" axisCodeLog="21" functionCode="33" functionCodeLog="51" conditionCode="9E" conditionCodeLog="9E">
+      <PARAMS param="0064" codeLog="00" codeType="0" coef="1" valMini="0" valMaxi="999" unit="." visu="false"/>
+      <PARAMS param="0147" codeLog="00" codeType="0" coef="1" valMini="0" valMaxi="65535" unit="." visu="false"/>
+      <PARAMS param="3FFF" codeLog="00" codeType="0" coef="1" valMini="0" valMaxi="65535" unit="." visu="false"/>
+      <PARAMS param="4000" codeLog="00" codeType="0" coef="1" valMini="0" valMaxi="65535" unit="." visu="false"/>
+      <PARAMS param="3100" codeLog="00" codeType="0" coef="1" valMini="0" valMaxi="65535" unit="." visu="false"/>
+      <PARAMS param="0666" codeLog="00" codeType="0" coef="1" valMini="0" valMaxi="65535" unit="." visu="false"/>
+      <PARAMS param="96F4" codeLog="00" codeType="0" coef="1" valMini="0" valMaxi="65535" unit="." visu="false"/>
+      <PARAMS param="0181" codeLog="00" codeType="0" coef="1" valMini="0" valMaxi="65535" unit="." visu="false"/>
+      <PARAMS param="0004" codeLog="00" codeType="0" coef="1" valMini="0" valMaxi="65535" unit="." visu="false"/>
+    </CHARACTERISTIC>
+    <TRIGGER triggerType="0" lineNumber="0" value="0"/>
+  </CONFIG>
+  <CONFIG acknowledge="255">
+    <CHARACTERISTIC axisAddress="07" axisCodeLog="21" functionCode="68" functionCodeLog="85" conditionCode="FF" conditionCodeLog="">
+      <PARAMS param="0000" codeLog="00" codeType="0" coef="1" valMini="0" valMaxi="65535" unit="." visu="false"/>
+    </CHARACTERISTIC>
+    <TRIGGER triggerType="0" lineNumber="0" value="0"/>
+  </CONFIG>
+  <CONFIG acknowledge="255">
+    <CHARACTERISTIC axisAddress="07" axisCodeLog="21" functionCode="52" functionCodeLog="52" conditionCode="9E" conditionCodeLog="9E">
+      <PARAMS param="0206" codeLog="00" codeType="0" coef="1" valMini="0" valMaxi="65535" unit="." visu="false"/>
+      <PARAMS param="0000" codeLog="00" codeType="0" coef="1" valMini="0" valMaxi="65535" unit="." visu="false"/>
+      <PARAMS param="0000" codeLog="00" codeType="0" coef="1" valMini="0" valMaxi="65535" unit="." visu="false"/>
+      <PARAMS param="0000" codeLog="00" codeType="0" coef="1" valMini="0" valMaxi="65535" unit="." visu="false"/>
+      <PARAMS param="0000" codeLog="00" codeType="0" coef="1" valMini="0" valMaxi="65535" unit="." visu="false"/>
+      <PARAMS param="0000" codeLog="00" codeType="0" coef="1" valMini="0" valMaxi="65535" unit="." visu="false"/>
+      <PARAMS param="0206" codeLog="00" codeType="0" coef="1" valMini="0" valMaxi="65535" unit="." visu="false"/>
+      <PARAMS param="0000" codeLog="00" codeType="0" coef="1" valMini="0" valMaxi="65535" unit="." visu="false"/>
+    </CHARACTERISTIC>
+    <TRIGGER triggerType="0" lineNumber="0" value="0"/>
+  </CONFIG>
+  <CONFIG acknowledge="255">
+    <CHARACTERISTIC axisAddress="07" axisCodeLog="21" functionCode="3F" functionCodeLog="63" conditionCode="FF" conditionCodeLog="">
+      <PARAMS param="80F9" codeLog="01" codeType="3" coef="1" valMini="1" valMaxi="1" unit="mm" visu="true"/>
+    </CHARACTERISTIC>
+    <TRIGGER triggerType="0" lineNumber="0" value="0"/>
+  </CONFIG>
+  <CONFIG acknowledge="255">
+    <CHARACTERISTIC axisAddress="01" axisCodeLog="01" functionCode="02" functionCodeLog="M1" conditionCode="01" conditionCodeLog="M1"/>
+    <TRIGGER triggerType="0" lineNumber="0" value="0"/>
+  </CONFIG>
+  <CONFIG acknowledge="255">
+    <CHARACTERISTIC axisAddress="05" axisCodeLog="05" functionCode="02" functionCodeLog="M1" conditionCode="00" conditionCodeLog="M1"/>
+    <TRIGGER triggerType="0" lineNumber="0" value="0"/>
+  </CONFIG>
+  <CONFIG acknowledge="255">
+    <CHARACTERISTIC axisAddress="07" axisCodeLog="21" functionCode="35" functionCodeLog="M1" conditionCode="01" conditionCodeLog="M1"/>
+    <TRIGGER triggerType="0" lineNumber="0" value="0"/>
+  </CONFIG>
+  <CONFIG acknowledge="255">
+    <CHARACTERISTIC axisAddress="01" axisCodeLog="01" functionCode="0C" functionCodeLog="01" conditionCode="FF" conditionCodeLog="13">
+      <PARAMS param="A303" codeLog="01" codeType="3" coef="0,000769" valMini="5" valMaxi="550" unit="mm" visu="true"/>
+    </CHARACTERISTIC>
+    <TRIGGER triggerType="0" lineNumber="0" value="0"/>
+  </CONFIG>
+  <FUNCTION acknowledge="255">
+    <CHARACTERISTIC axisAddress="01" axisCodeLog="01" functionCode="0C" functionCodeLog="01" conditionCode="FF" conditionCodeLog="">
+      <PARAMS param="B8FB" codeLog="01" codeType="3" coef="0,000769" valMini="38" valMaxi="1300" unit="mm" visu="true"/>
+    </CHARACTERISTIC>
+    <TRIGGER triggerType="0" lineNumber="0" value="0"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="255">
+    <CHARACTERISTIC axisAddress="05" axisCodeLog="05" functionCode="09" functionCodeLog="09" conditionCode="FF" conditionCodeLog="">
+      <PARAMS param="0002" codeLog="23" codeType="0" coef="1" valMini="2" valMaxi="7" unit="." visu="true"/>
+      <PARAMS param="0007" codeLog="24" codeType="0" coef="0,1" valMini="10" valMaxi="250" unit="ms" visu="true"/>
+      <PARAMS param="0576" codeLog="30" codeType="0" coef="13,981" valMini="10" valMaxi="1500" unit="mm/mn" visu="true"/>
+    </CHARACTERISTIC>
+    <TRIGGER triggerType="1" lineNumber="1" value="0"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="255">
+    <CHARACTERISTIC axisAddress="00" axisCodeLog="50" functionCode="0E" functionCodeLog="01" conditionCode="FF" conditionCodeLog=""/>
+    <TRIGGER triggerType="1" lineNumber="2" value="0"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="255">
+    <CHARACTERISTIC axisAddress="01" axisCodeLog="01" functionCode="0A" functionCodeLog="07" conditionCode="FF" conditionCodeLog=""/>
+    <TRIGGER triggerType="1" lineNumber="3" value="30"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="0">
+    <CHARACTERISTIC axisAddress="05" axisCodeLog="05" functionCode="29" functionCodeLog="41" conditionCode="00" conditionCodeLog="00">
+      <PARAMS param="1062" codeLog="14" codeType="0" coef="13,981" valMini="10" valMaxi="1500" unit="mm/mn" visu="true"/>
+    </CHARACTERISTIC>
+    <TRIGGER triggerType="1" lineNumber="4" value="0"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="0">
+    <CHARACTERISTIC axisAddress="00" axisCodeLog="00" functionCode="04" functionCodeLog="03" conditionCode="01" conditionCodeLog="13">
+      <PARAMS param="2E8B" codeLog="04" codeType="0" coef="119,1545" valMini="5" valMaxi="550" unit="A" visu="true"/>
+    </CHARACTERISTIC>
+    <TRIGGER triggerType="1" lineNumber="5" value="0"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="0">
+    <CHARACTERISTIC axisAddress="05" axisCodeLog="05" functionCode="11" functionCodeLog="17" conditionCode="00" conditionCodeLog="26">
+      <PARAMS param="0168" codeLog="25" codeType="1" coef="120" valMini="0" valMaxi="270" unit="mm" visu="true"/>
+      <PARAMS param="0576" codeLog="14" codeType="0" coef="13,981" valMini="10" valMaxi="1500" unit="mm/mn" visu="true"/>
+    </CHARACTERISTIC>
+    <TRIGGER triggerType="1" lineNumber="6" value="0"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="255">
+    <CHARACTERISTIC axisAddress="FE" axisCodeLog="52" functionCode="1B" functionCodeLog="06" conditionCode="FF" conditionCodeLog=""/>
+    <TRIGGER triggerType="1" lineNumber="7" value="0"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="255">
+    <CHARACTERISTIC axisAddress="00" axisCodeLog="00" functionCode="08" functionCodeLog="06" conditionCode="00" conditionCodeLog="01">
+      <PARAMS param="5D17" codeLog="06" codeType="0" coef="119,1545" valMini="5" valMaxi="550" unit="A" visu="true"/>
+    </CHARACTERISTIC>
+    <TRIGGER triggerType="1" lineNumber="8" value="20"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="255">
+    <CHARACTERISTIC axisAddress="FE" axisCodeLog="52" functionCode="1C" functionCodeLog="07" conditionCode="00" conditionCodeLog="02"/>
+    <TRIGGER triggerType="1" lineNumber="9" value="0"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="255">
+    <CHARACTERISTIC axisAddress="01" axisCodeLog="01" functionCode="05" functionCodeLog="04" conditionCode="00" conditionCodeLog="01">
+      <PARAMS param="00ED" codeLog="02" codeType="0" coef="1,1856" valMini="10" valMaxi="11055" unit="mm/mn" visu="true"/>
+    </CHARACTERISTIC>
+    <TRIGGER triggerType="1" lineNumber="10" value="0"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="0">
+    <CHARACTERISTIC axisAddress="07" axisCodeLog="5A" functionCode="14" functionCodeLog="20" conditionCode="01" conditionCodeLog="01"/>
+    <TRIGGER triggerType="1" lineNumber="11" value="0"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="255">
+    <CHARACTERISTIC axisAddress="FE" axisCodeLog="52" functionCode="1F" functionCodeLog="08" conditionCode="FF" conditionCodeLog=""/>
+    <TRIGGER triggerType="1" lineNumber="12" value="0"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="255">
+    <CHARACTERISTIC axisAddress="05" axisCodeLog="05" functionCode="0A" functionCodeLog="10" conditionCode="FF" conditionCodeLog=""/>
+    <TRIGGER triggerType="1" lineNumber="13" value="0"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="0">
+    <CHARACTERISTIC axisAddress="00" axisCodeLog="00" functionCode="09" functionCodeLog="07" conditionCode="FF" conditionCodeLog="">
+      <PARAMS param="0019" codeLog="15" codeType="0" coef="250" valMini="0,1" valMaxi="250" unit="s" visu="true"/>
+      <PARAMS param="0BA3" codeLog="16" codeType="0" coef="119,1545" valMini="5" valMaxi="550" unit="A" visu="true"/>
+    </CHARACTERISTIC>
+    <TRIGGER triggerType="1" lineNumber="14" value="0"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="255">
+    <CHARACTERISTIC axisAddress="FE" axisCodeLog="52" functionCode="20" functionCodeLog="09" conditionCode="FF" conditionCodeLog=""/>
+    <TRIGGER triggerType="1" lineNumber="15" value="0"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="0">
+    <CHARACTERISTIC axisAddress="05" axisCodeLog="05" functionCode="11" functionCodeLog="17" conditionCode="00" conditionCodeLog="26">
+      <PARAMS param="0708" codeLog="25" codeType="1" coef="120" valMini="0" valMaxi="270" unit="mm" visu="true"/>
+      <PARAMS param="1B4F" codeLog="14" codeType="0" coef="13,981" valMini="10" valMaxi="1500" unit="mm/mn" visu="true"/>
+    </CHARACTERISTIC>
+    <TRIGGER triggerType="1" lineNumber="16" value="0"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="255">
+    <CHARACTERISTIC axisAddress="01" axisCodeLog="01" functionCode="05" functionCodeLog="04" conditionCode="00" conditionCodeLog="01">
+      <PARAMS param="06F2" codeLog="02" codeType="0" coef="1,1856" valMini="10" valMaxi="11055" unit="mm/mn" visu="true"/>
+    </CHARACTERISTIC>
+    <TRIGGER triggerType="1" lineNumber="17" value="0"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="0">
+    <CHARACTERISTIC axisAddress="07" axisCodeLog="5A" functionCode="14" functionCodeLog="20" conditionCode="00" conditionCodeLog="00"/>
+    <TRIGGER triggerType="1" lineNumber="18" value="0"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="0">
+    <CHARACTERISTIC axisAddress="05" axisCodeLog="05" functionCode="29" functionCodeLog="41" conditionCode="00" conditionCodeLog="00">
+      <PARAMS param="1062" codeLog="14" codeType="0" coef="13,981" valMini="10" valMaxi="1500" unit="mm/mn" visu="true"/>
+    </CHARACTERISTIC>
+    <TRIGGER triggerType="1" lineNumber="19" value="0"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="0">
+    <CHARACTERISTIC axisAddress="05" axisCodeLog="05" functionCode="11" functionCodeLog="17" conditionCode="00" conditionCodeLog="26">
+      <PARAMS param="0168" codeLog="25" codeType="1" coef="120" valMini="0" valMaxi="270" unit="mm" visu="true"/>
+      <PARAMS param="0576" codeLog="14" codeType="0" coef="13,981" valMini="10" valMaxi="1500" unit="mm/mn" visu="true"/>
+    </CHARACTERISTIC>
+    <TRIGGER triggerType="1" lineNumber="20" value="0"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="0">
+    <CHARACTERISTIC axisAddress="00" axisCodeLog="00" functionCode="05" functionCodeLog="04" conditionCode="01" conditionCodeLog="13">
+      <PARAMS param="2E8B" codeLog="04" codeType="0" coef="119,1545" valMini="5" valMaxi="550" unit="A" visu="true"/>
+    </CHARACTERISTIC>
+    <TRIGGER triggerType="1" lineNumber="21" value="0"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="255">
+    <CHARACTERISTIC axisAddress="00" axisCodeLog="00" functionCode="08" functionCodeLog="06" conditionCode="00" conditionCodeLog="01">
+      <PARAMS param="5D17" codeLog="06" codeType="0" coef="119,1545" valMini="5" valMaxi="550" unit="A" visu="true"/>
+    </CHARACTERISTIC>
+    <TRIGGER triggerType="1" lineNumber="22" value="20"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="255">
+    <CHARACTERISTIC axisAddress="FE" axisCodeLog="52" functionCode="1C" functionCodeLog="07" conditionCode="00" conditionCodeLog="02"/>
+    <TRIGGER triggerType="1" lineNumber="23" value="0"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="255">
+    <CHARACTERISTIC axisAddress="01" axisCodeLog="01" functionCode="05" functionCodeLog="04" conditionCode="00" conditionCodeLog="01">
+      <PARAMS param="00ED" codeLog="02" codeType="0" coef="1,1856" valMini="10" valMaxi="11055" unit="mm/mn" visu="true"/>
+    </CHARACTERISTIC>
+    <TRIGGER triggerType="1" lineNumber="24" value="0"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="0">
+    <CHARACTERISTIC axisAddress="07" axisCodeLog="5A" functionCode="14" functionCodeLog="20" conditionCode="01" conditionCodeLog="01"/>
+    <TRIGGER triggerType="1" lineNumber="25" value="0"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="255">
+    <CHARACTERISTIC axisAddress="FE" axisCodeLog="52" functionCode="1F" functionCodeLog="08" conditionCode="FF" conditionCodeLog=""/>
+    <TRIGGER triggerType="1" lineNumber="26" value="0"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="255">
+    <CHARACTERISTIC axisAddress="05" axisCodeLog="05" functionCode="0A" functionCodeLog="10" conditionCode="FF" conditionCodeLog=""/>
+    <TRIGGER triggerType="1" lineNumber="27" value="0"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="0">
+    <CHARACTERISTIC axisAddress="00" axisCodeLog="00" functionCode="09" functionCodeLog="07" conditionCode="FF" conditionCodeLog="">
+      <PARAMS param="0019" codeLog="15" codeType="0" coef="250" valMini="0,1" valMaxi="250" unit="s" visu="true"/>
+      <PARAMS param="0BA3" codeLog="16" codeType="0" coef="119,1545" valMini="5" valMaxi="550" unit="A" visu="true"/>
+    </CHARACTERISTIC>
+    <TRIGGER triggerType="1" lineNumber="28" value="0"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="255">
+    <CHARACTERISTIC axisAddress="FE" axisCodeLog="52" functionCode="20" functionCodeLog="09" conditionCode="FF" conditionCodeLog=""/>
+    <TRIGGER triggerType="1" lineNumber="29" value="0"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="0">
+    <CHARACTERISTIC axisAddress="05" axisCodeLog="05" functionCode="11" functionCodeLog="17" conditionCode="00" conditionCodeLog="26">
+      <PARAMS param="0708" codeLog="25" codeType="1" coef="120" valMini="0" valMaxi="270" unit="mm" visu="true"/>
+      <PARAMS param="1B4F" codeLog="14" codeType="0" coef="13,981" valMini="10" valMaxi="1500" unit="mm/mn" visu="true"/>
+    </CHARACTERISTIC>
+    <TRIGGER triggerType="1" lineNumber="30" value="0"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="255">
+    <CHARACTERISTIC axisAddress="01" axisCodeLog="01" functionCode="05" functionCodeLog="04" conditionCode="00" conditionCodeLog="01">
+      <PARAMS param="06F2" codeLog="02" codeType="0" coef="1,1856" valMini="10" valMaxi="11055" unit="mm/mn" visu="true"/>
+    </CHARACTERISTIC>
+    <TRIGGER triggerType="1" lineNumber="31" value="0"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="0">
+    <CHARACTERISTIC axisAddress="07" axisCodeLog="5A" functionCode="14" functionCodeLog="20" conditionCode="00" conditionCodeLog="00"/>
+    <TRIGGER triggerType="1" lineNumber="32" value="0"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="0">
+    <CHARACTERISTIC axisAddress="05" axisCodeLog="05" functionCode="29" functionCodeLog="41" conditionCode="00" conditionCodeLog="00">
+      <PARAMS param="1062" codeLog="14" codeType="0" coef="13,981" valMini="10" valMaxi="1500" unit="mm/mn" visu="true"/>
+    </CHARACTERISTIC>
+    <TRIGGER triggerType="1" lineNumber="33" value="0"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="0">
+    <CHARACTERISTIC axisAddress="05" axisCodeLog="05" functionCode="11" functionCodeLog="17" conditionCode="00" conditionCodeLog="26">
+      <PARAMS param="0168" codeLog="25" codeType="1" coef="120" valMini="0" valMaxi="270" unit="mm" visu="true"/>
+      <PARAMS param="0576" codeLog="14" codeType="0" coef="13,981" valMini="10" valMaxi="1500" unit="mm/mn" visu="true"/>
+    </CHARACTERISTIC>
+    <TRIGGER triggerType="1" lineNumber="34" value="0"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="0">
+    <CHARACTERISTIC axisAddress="00" axisCodeLog="00" functionCode="05" functionCodeLog="04" conditionCode="01" conditionCodeLog="13">
+      <PARAMS param="2E8B" codeLog="04" codeType="0" coef="119,1545" valMini="5" valMaxi="550" unit="A" visu="true"/>
+    </CHARACTERISTIC>
+    <TRIGGER triggerType="1" lineNumber="35" value="0"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="255">
+    <CHARACTERISTIC axisAddress="00" axisCodeLog="00" functionCode="08" functionCodeLog="06" conditionCode="00" conditionCodeLog="01">
+      <PARAMS param="5D17" codeLog="06" codeType="0" coef="119,1545" valMini="5" valMaxi="550" unit="A" visu="true"/>
+    </CHARACTERISTIC>
+    <TRIGGER triggerType="1" lineNumber="36" value="0"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="255">
+    <CHARACTERISTIC axisAddress="FE" axisCodeLog="52" functionCode="1C" functionCodeLog="07" conditionCode="00" conditionCodeLog="02"/>
+    <TRIGGER triggerType="1" lineNumber="37" value="0"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="255">
+    <CHARACTERISTIC axisAddress="01" axisCodeLog="01" functionCode="05" functionCodeLog="04" conditionCode="00" conditionCodeLog="01">
+      <PARAMS param="00ED" codeLog="02" codeType="0" coef="1,1856" valMini="10" valMaxi="11055" unit="mm/mn" visu="true"/>
+    </CHARACTERISTIC>
+    <TRIGGER triggerType="1" lineNumber="38" value="0"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="0">
+    <CHARACTERISTIC axisAddress="07" axisCodeLog="21" functionCode="48" functionCodeLog="72" conditionCode="00" conditionCodeLog="04">
+      <PARAMS param="004B" codeLog="08" codeType="1" coef="18,75" valMini="2" valMaxi="1000" unit="mm" visu="true"/>
+      <PARAMS param="1333" codeLog="02" codeType="0" coef="16,383" valMini="20" valMaxi="1000" unit="mm/mn" visu="true"/>
+    </CHARACTERISTIC>
+    <TRIGGER triggerType="2" lineNumber="0" value="1117"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="255">
+    <CHARACTERISTIC axisAddress="FE" axisCodeLog="52" functionCode="01" functionCodeLog="01" conditionCode="FF" conditionCodeLog=""/>
+    <TRIGGER triggerType="1" lineNumber="40" value="0"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="255">
+    <CHARACTERISTIC axisAddress="FE" axisCodeLog="52" functionCode="2C" functionCodeLog="13" conditionCode="00" conditionCodeLog="02">
+      <PARAMS param="000C" codeLog="02" codeType="0" coef="1" valMini="1" valMaxi="255" unit="." visu="true"/>
+      <PARAMS param="000A" codeLog="03" codeType="0" coef="1" valMini="1" valMaxi="30000" unit="." visu="true"/>
+    </CHARACTERISTIC>
+    <TRIGGER triggerType="1" lineNumber="41" value="0"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="255">
+    <CHARACTERISTIC axisAddress="FE" axisCodeLog="52" functionCode="1F" functionCodeLog="08" conditionCode="FF" conditionCodeLog=""/>
+    <TRIGGER triggerType="1" lineNumber="42" value="0"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="255">
+    <CHARACTERISTIC axisAddress="05" axisCodeLog="05" functionCode="0A" functionCodeLog="10" conditionCode="FF" conditionCodeLog=""/>
+    <TRIGGER triggerType="1" lineNumber="43" value="0"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="0">
+    <CHARACTERISTIC axisAddress="00" axisCodeLog="00" functionCode="09" functionCodeLog="07" conditionCode="FF" conditionCodeLog="">
+      <PARAMS param="0019" codeLog="15" codeType="0" coef="250" valMini="0,1" valMaxi="250" unit="s" visu="true"/>
+      <PARAMS param="0BA3" codeLog="16" codeType="0" coef="119,1545" valMini="5" valMaxi="550" unit="A" visu="true"/>
+    </CHARACTERISTIC>
+    <TRIGGER triggerType="1" lineNumber="44" value="0"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="255">
+    <CHARACTERISTIC axisAddress="01" axisCodeLog="01" functionCode="0A" functionCodeLog="07" conditionCode="FF" conditionCodeLog=""/>
+    <TRIGGER triggerType="1" lineNumber="45" value="0"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="255">
+    <CHARACTERISTIC axisAddress="00" axisCodeLog="50" functionCode="0D" functionCodeLog="05" conditionCode="FF" conditionCodeLog=""/>
+    <TRIGGER triggerType="1" lineNumber="46" value="50"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="255">
+    <CHARACTERISTIC axisAddress="FE" axisCodeLog="52" functionCode="20" functionCodeLog="09" conditionCode="FF" conditionCodeLog=""/>
+    <TRIGGER triggerType="1" lineNumber="47" value="0"/>
+  </FUNCTION>
+  <FUNCTION acknowledge="0">
+    <CHARACTERISTIC axisAddress="05" axisCodeLog="05" functionCode="11" functionCodeLog="17" conditionCode="00" conditionCodeLog="26">
+      <PARAMS param="0708" codeLog="25" codeType="1" coef="120" valMini="0" valMaxi="270" unit="mm" visu="true"/>
+      <PARAMS param="1B4F" codeLog="14" codeType="0" coef="13,981" valMini="10" valMaxi="1500" unit="mm/mn" visu="true"/>
+    </CHARACTERISTIC>
+    <TRIGGER triggerType="1" lineNumber="48" value="0"/>
+  </FUNCTION>
+</PROGRAM>
