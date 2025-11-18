@@ -258,14 +258,33 @@ Sub CreateUnifiedProgram(sequence() As Integer, sourcePath As String, outputPath
 
         ' Apri connessione al sorgente
         Set connSource = CreateObject("ADODB.Connection")
+        On Error Resume Next
         connSource.Open connStr & sourceFile
 
+        If Err.Number <> 0 Then
+            MsgBox "Errore apertura file: " & sourceFile & vbCrLf & Err.Description, vbExclamation
+            Err.Clear
+            On Error GoTo ErrorHandler
+            GoTo NextProgram
+        End If
+        On Error GoTo ErrorHandler
+
         ' Leggi tutte le righe dalla tabella Soudure del sorgente
-        On Error Resume Next
         Set rsSource = CreateObject("ADODB.Recordset")
+        On Error Resume Next
         rsSource.Open "SELECT * FROM Soudure ORDER BY so_NumLigne", connSource, 3, 1
 
-        If Err.Number = 0 And Not rsSource.EOF Then
+        If Err.Number <> 0 Then
+            MsgBox "Errore lettura tabella Soudure da: " & sourceFile & vbCrLf & Err.Description, vbExclamation
+            Err.Clear
+            connSource.Close
+            Set connSource = Nothing
+            On Error GoTo ErrorHandler
+            GoTo NextProgram
+        End If
+        On Error GoTo ErrorHandler
+
+        If Not rsSource.EOF Then
             ' Apri la tabella target per inserimento
             Set rsTarget = CreateObject("ADODB.Recordset")
             rsTarget.Open "Soudure", connTarget, 1, 3 ' adOpenKeyset, adLockOptimistic
@@ -278,6 +297,7 @@ Sub CreateUnifiedProgram(sequence() As Integer, sourcePath As String, outputPath
 
                     ' Salta campi auto-incremento o ID (non possono essere copiati)
                     If LCase(fld.Name) = "id" Or _
+                       LCase(fld.Name) = "so_id" Or _
                        (fld.Attributes And &H10) = &H10 Then ' adFldRowID
                         ' Skip - campo auto-incremento
                     ElseIf fld.Name = "so_NumLigne" Then
@@ -293,13 +313,15 @@ Sub CreateUnifiedProgram(sequence() As Integer, sourcePath As String, outputPath
                         ' Copia il valore originale
                         rsTarget(fld.Name) = fld.Value
                     End If
+
+                    On Error GoTo ErrorHandler
                 Next fld
 
                 ' Update con gestione errori
                 On Error Resume Next
                 rsTarget.Update
                 If Err.Number <> 0 Then
-                    Debug.Print "Errore Update: " & Err.Description
+                    Debug.Print "Errore Update riga " & rsSource("so_NumLigne") & ": " & Err.Description
                     Err.Clear
                 End If
                 On Error GoTo ErrorHandler
@@ -314,14 +336,14 @@ Sub CreateUnifiedProgram(sequence() As Integer, sourcePath As String, outputPath
         rsSource.Close
         Set rsSource = Nothing
 
-        On Error GoTo ErrorHandler
-
         ' Aggiorna offset per il prossimo programma
         currentLineOffset = currentLineOffset + Programs(progNum).MaxLineNumber
 
         ' Chiudi connessione sorgente
         connSource.Close
         Set connSource = Nothing
+
+NextProgram:
     Next i
 
     ' Chiudi connessione target
