@@ -400,6 +400,73 @@ Sub CreateUnifiedProgram(sequence() As Integer, sourcePath As String, outputPath
         rsSource.Close
         Set rsSource = Nothing
 
+        ' Ora copia anche le righe da Script_Prog
+        Set rsSource = CreateObject("ADODB.Recordset")
+        On Error Resume Next
+        rsSource.Open "SELECT * FROM Script_Prog ORDER BY sp_Numero", connSource, 3, 1
+
+        If Err.Number = 0 And Not rsSource.EOF Then
+            Do While Not rsSource.EOF
+                fieldNames = ""
+                fieldValues = ""
+
+                For Each fld In rsSource.Fields
+                    ' Salta campi auto-incremento o ID
+                    If LCase(fld.Name) = "id" Or _
+                       LCase(fld.Name) = "sp_id" Or _
+                       (fld.Attributes And &H10) = &H10 Then
+                        ' Skip
+                    Else
+                        ' Aggiungi nome campo
+                        If fieldNames <> "" Then fieldNames = fieldNames & ", "
+                        fieldNames = fieldNames & "[" & fld.Name & "]"
+
+                        ' Determina il valore
+                        If fld.Name = "sp_Numero" Then
+                            fieldValue = fld.Value + currentLineOffset
+                        ElseIf fld.Name = "sp_CodProg" Then
+                            fieldValue = finalProgNum
+                        ElseIf fld.Name = "sp_LibProg" Then
+                            fieldValue = finalProgName
+                        Else
+                            fieldValue = fld.Value
+                        End If
+
+                        ' Aggiungi valore con formattazione corretta
+                        If fieldValues <> "" Then fieldValues = fieldValues & ", "
+
+                        If IsNull(fieldValue) Then
+                            fieldValues = fieldValues & "NULL"
+                        ElseIf fld.Type = 202 Or fld.Type = 200 Or fld.Type = 201 Then ' String types
+                            fieldValues = fieldValues & "'" & Replace(CStr(fieldValue), "'", "''") & "'"
+                        ElseIf fld.Type = 7 Then ' Date
+                            fieldValues = fieldValues & "#" & CStr(fieldValue) & "#"
+                        Else
+                            fieldValues = fieldValues & CStr(fieldValue)
+                        End If
+                    End If
+                Next fld
+
+                ' Esegui INSERT in Script_Prog
+                insertSQL = "INSERT INTO Script_Prog (" & fieldNames & ") VALUES (" & fieldValues & ")"
+                connTarget.Execute insertSQL
+                If Err.Number <> 0 Then
+                    Debug.Print "Errore INSERT Script_Prog: " & Err.Description
+                    Err.Clear
+                End If
+
+                rsSource.MoveNext
+            Loop
+        End If
+
+        If Err.Number <> 0 Then Err.Clear
+        On Error GoTo ErrorHandler
+
+        If Not rsSource Is Nothing Then
+            rsSource.Close
+            Set rsSource = Nothing
+        End If
+
         ' Aggiorna offset per il prossimo programma
         currentLineOffset = currentLineOffset + Programs(progNum).MaxLineNumber
 
