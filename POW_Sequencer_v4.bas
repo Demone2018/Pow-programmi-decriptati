@@ -291,15 +291,6 @@ Sub CreateUnifiedProgram(sequence() As Integer, sourcePath As String, outputPath
         Err.Clear
     End If
 
-    ' Aggiorna anche il nome in Script_Prog se esiste il campo
-    sql = "UPDATE Script_Prog SET sp_LibProg = '" & finalProgName & "'"
-    connTarget.Execute sql
-
-    If Err.Number <> 0 Then
-        Debug.Print "UPDATE Script_Prog sp_LibProg failed: " & Err.Description
-        Err.Clear
-    End If
-
     On Error GoTo ErrorHandler
 
     ' Offset iniziale per lineNumber (dopo le linee del primo programma)
@@ -403,7 +394,7 @@ Sub CreateUnifiedProgram(sequence() As Integer, sourcePath As String, outputPath
         ' Ora copia anche le righe da Script_Prog
         Set rsSource = CreateObject("ADODB.Recordset")
         On Error Resume Next
-        rsSource.Open "SELECT * FROM Script_Prog ORDER BY sp_Numero", connSource, 3, 1
+        rsSource.Open "SELECT * FROM Script_Prog ORDER BY sp_NumLig", connSource, 3, 1
 
         If Err.Number = 0 And Not rsSource.EOF Then
             Do While Not rsSource.EOF
@@ -422,12 +413,10 @@ Sub CreateUnifiedProgram(sequence() As Integer, sourcePath As String, outputPath
                         fieldNames = fieldNames & "[" & fld.Name & "]"
 
                         ' Determina il valore
-                        If fld.Name = "sp_Numero" Then
+                        If fld.Name = "sp_NumLig" Then
                             fieldValue = fld.Value + currentLineOffset
                         ElseIf fld.Name = "sp_CodProg" Then
                             fieldValue = finalProgNum
-                        ElseIf fld.Name = "sp_LibProg" Then
-                            fieldValue = finalProgName
                         Else
                             fieldValue = fld.Value
                         End If
